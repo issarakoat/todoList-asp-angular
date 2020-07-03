@@ -10,4 +10,19 @@ export class TodoService {
   onFetching() {
     return this.http.get<TodoModel>(environment.url + 'TodoItems');
   }
+  onCreate(todo: TodoModel) {
+    return this.http.post<{ name: string }>(
+      environment.url + '/TodoItems.json',
+      todo
+    );
+  }
+  onDelete(id: number) {
+    return this.http.delete(environment.url + '/TodoItems/' + id + '.json');
+  }
+  onUpdate(id: number, name: string, isComplete: string) {
+    return this.http.put(environment.url + '/TodoItems/' + id + '.json', {
+      name: name,
+      isComplete: isComplete,
+    });
+  }
 }

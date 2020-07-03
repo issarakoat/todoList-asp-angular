@@ -7,7 +7,7 @@ import { TodoModel } from './todo.model'
   templateUrl: './todos.component.html',
 })
 export class TodosComponent implements OnInit {
-
+  todos: TodoModel[] = [];
   constructor(private todoService: TodoService) { }
 
   ngOnInit(): void {
@@ -19,17 +19,18 @@ export class TodosComponent implements OnInit {
       .onFetching()
       .pipe(
         map((responsData) => {
-          const postsAarray: TodoModel[] = [];
+          const todosArray: TodoModel[] = [];
           for (const key in responsData) {
             if (responsData.hasOwnProperty(key)) {
-              postsAarray.push({ ...responsData[key], id: key });
+              todosArray.push({ ...responsData[key], id: key });
             }
           }
-          return postsAarray;
+          return todosArray;
         })
       )
       .subscribe((responseData) => {
         console.log(responseData);
+        this.todos = responseData;
       });
     // Send Http request
   }
