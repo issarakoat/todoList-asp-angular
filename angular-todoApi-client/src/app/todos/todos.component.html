@@ -40,7 +40,7 @@
       <tr *ngFor='let todo of todos;'>
         <th scope="row">{{ todo.id }}</th>
         <td>{{ todo.name }}</td>
-        <td><input [checked]= "todo.isComplete"  type="checkbox" class="form-check-input" id="exampleCheck1"> </td>
+        <td><input #checkBox (change)='onUpdate(todo)' [checked]= "todo.isComplete"  type="checkbox" class="form-check-input" id="checkBox"> </td>
         <td><button (click)='onDelete(todo.id)' class="btn btn-danger">delete</button></td>
       </tr>
     </tbody>

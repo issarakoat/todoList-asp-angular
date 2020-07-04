@@ -9,7 +9,8 @@ import { NgForm } from '@angular/forms';
 })
 export class TodosComponent implements OnInit {
   @ViewChild('form', { static: false }) form: NgForm;
-  todos: TodoModel[] = [];
+  @ViewChild('checkBox', { static: false }) checkBox: NgForm;
+  todos: TodoModel[];
   constructor(private todoService: TodoService) {}
 
   ngOnInit(): void {
@@ -17,34 +18,28 @@ export class TodosComponent implements OnInit {
   }
   onCreateTodo(todo: TodoModel) {
     todo.isComplete = false;
-    this.todoService.onCreate(todo).subscribe(res => {
+    this.todoService.onCreate(todo).subscribe((res) => {
       this.onFetchPosts();
       this.form.form.reset();
     });
   }
-  onDelete(id: number){
-    this.todoService.onDelete(id).subscribe( res => {
+  onDelete(id: number) {
+    this.todoService.onDelete(id).subscribe((res) => {
       this.onFetchPosts();
     });
+  }
+  onUpdate(todo: TodoModel) {
+    todo.isComplete = !todo.isComplete;
+    console.log(todo);
+    this.todoService.onUpdate(todo).subscribe();
   }
   onFetchPosts() {
     this.todoService
       .onFetching()
-      .pipe(
-        map((responsData) => {
-          const todosArray: TodoModel[] = [];
-          for (const key in responsData) {
-            if (responsData.hasOwnProperty(key)) {
-              todosArray.push({ ...responsData[key], id: key });
-            }
-          }
-          return todosArray;
-        })
-      )
-      .subscribe((responseData) => {
-        console.log(responseData);
-        this.todos = responseData;
+      .toPromise()
+      .then((res) => {
+        console.log(res);
+        this.todos = res;
       });
-    // Send Http request
   }
 }

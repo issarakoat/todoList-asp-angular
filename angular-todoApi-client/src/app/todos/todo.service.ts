@@ -8,22 +8,15 @@ import { TodoModel } from './todo.model';
 export class TodoService {
   constructor(private http: HttpClient) {}
   onFetching() {
-    return this.http.get<TodoModel>(environment.url + 'TodoItems');
+    return this.http.get<TodoModel[]>(environment.url + 'TodoItems');
   }
   onCreate(todo: TodoModel) {
-    console.log(todo);
-    return this.http.post(
-      environment.url + 'TodoItems',
-      todo
-    );
+    return this.http.post(environment.url + 'TodoItems', todo);
   }
   onDelete(id: number) {
     return this.http.delete(environment.url + 'TodoItems/' + id);
   }
-  onUpdate(id: number, name: string, isComplete: string) {
-    return this.http.put(environment.url + 'TodoItems/' + id + '.json', {
-      name: name,
-      isComplete: isComplete,
-    });
+  onUpdate(todo: TodoModel) {
+    return this.http.put(environment.url + 'TodoItems/' + todo.id , todo);
   }
 }
